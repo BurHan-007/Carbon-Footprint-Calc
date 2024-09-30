@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carbon Footprint Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="hero">
+            <h1>Carbon Footprint Initiative</h1>
+            <p>Helping you reduce your building's carbon impact.</p>
+            <a href="#calculator" class="hero-btn">Get Started</a>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#goals">Our Goals</a></li>
+            <li><a href="#calculator">Calculator</a></li>
+            <li><a href="#footer">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section id="home" class="content-section light-section">
+        <div class="container">
+            <h2>About the Project</h2>
+            <p>We aim to promote sustainable practices in building design and operation by enabling users to understand their carbon impact.</p>
+        </div>
+    </section>
+
+    <section id="goals" class="content-section dark-section">
+        <div class="container">
+            <h2>Our Goals</h2>
+            <div class="cards">
+                <div class="card">
+                    <i class="fas fa-leaf"></i>
+                    <h3>Sustainability</h3>
+                    <p>Promote energy-efficient and sustainable building practices.</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-globe"></i>
+                    <h3>Reduce Emissions</h3>
+                    <p>Minimize the carbon footprint of construction and daily operation.</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-recycle"></i>
+                    <h3>Eco-Friendly</h3>
+                    <p>Encourage the use of environmentally-friendly materials.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="calculator" class="content-section light-section">
+        <div class="container">
+            <h2>Data Center Carbon Footprint Calculator</h2>
+            <form id="carbon-footprint-form">
+                <div class="input-group">
+                    <label for="energyConsumption">Total Energy Consumption (kWh)</label>
+                    <input type="number" id="energyConsumption" placeholder="Enter total energy usage (kWh)" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="energySource">Energy Source</label>
+                    <select id="energySource" required>
+                        <option value="non-renewable">Non-Renewable</option>
+                        <option value="renewable">Renewable</option>
+                    </select>
+                </div>
+    
+                <div class="input-group">
+                    <label for="coolingConsumption">Cooling System Energy Consumption (kWh)</label>
+                    <input type="number" id="coolingConsumption" placeholder="Enter cooling system energy usage (kWh)" required>
+                </div>
+    
+                <div class="input-group">
+                    <label for="pue">Power Usage Effectiveness (PUE)</label>
+                    <input type="number" id="pue" step="0.01" placeholder="Enter PUE value" required>
+                </div>
+    
+                <button type="submit" class="btn">Calculate Carbon Footprint</button>
+            </form>
+    
+            <div id="result" class="result-section">
+                <h3>Your Data Center's Carbon Footprint</h3>
+                <p id="carbonFootprintOutput">Fill in the details to see the result.</p>
+            </div>
+        </div>
+    </section>
+    
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-social">
+                <h3>Follow Us</h3>
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Carbon Footprint Project | All Rights Reserved</p>
+        </div>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>
