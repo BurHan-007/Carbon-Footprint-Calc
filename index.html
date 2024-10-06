@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <header>
@@ -58,43 +59,61 @@
 
     <section id="calculator" class="content-section light-section">
         <div class="container">
-            <h2>Data Center Carbon Footprint Calculator</h2>
+            <h2>Carbon Footprint Calculator</h2>
             <form id="carbon-footprint-form">
-                <div class="input-group">
-                    <label for="energyConsumption">Total Energy Consumption (kWh)</label>
-                    <input type="number" id="energyConsumption" placeholder="Enter total energy usage (kWh)" required>
+                <div class="form-group">
+                    <label for="energyConsumption">Energy Consumption (kWh):</label>
+                    <input type="number" id="energyConsumption" name="energyConsumption" step="0.01" required>
                 </div>
-                
-                <div class="input-group">
-                    <label for="energySource">Energy Source</label>
-                    <select id="energySource" required>
-                        <option value="non-renewable">Non-Renewable</option>
-                        <option value="renewable">Renewable</option>
+            
+                <div class="form-group">
+                    <label for="energySource">Energy Source:</label>
+                    <select id="energySource" name="energySource">
+                        <option value="coal">Coal</option>
+                        <option value="naturalGas">Natural Gas</option>
+                        <option value="hydro">Hydroelectric</option>
+                        <option value="solar">Solar</option>
+                        <option value="wind">Wind</option>
                     </select>
                 </div>
-    
-                <div class="input-group">
-                    <label for="coolingConsumption">Cooling System Energy Consumption (kWh)</label>
-                    <input type="number" id="coolingConsumption" placeholder="Enter cooling system energy usage (kWh)" required>
+            
+                <div class="form-group">
+                    <label for="coolingConsumption">Cooling Energy Consumption (kWh):</label>
+                    <input type="number" id="coolingConsumption" name="coolingConsumption" step="0.01" required>
                 </div>
-    
-                <div class="input-group">
-                    <label for="pue">Power Usage Effectiveness (PUE)</label>
-                    <input type="number" id="pue" step="0.01" placeholder="Enter PUE value" required>
+            
+                <div class="form-group">
+                    <label for="location">Location:</label>
+                    <select id="location" name="location">
+                        <option value="tropical">Tropical</option>
+                        <option value="temperate">Temperate</option>
+                        <option value="desert">Desert</option>
+                    </select>
                 </div>
-    
-                <button type="submit" class="btn">Calculate Carbon Footprint</button>
+            
+                <div class="form-group">
+                    <label for="dieselUsage">Diesel Generator Usage (hours):</label>
+                    <input type="number" id="dieselUsage" name="dieselUsage" step="0.01" required>
+                </div>
+            
+                <div class="form-group">
+                    <label for="pue">Power Usage Effectiveness (PUE):</label>
+                    <input type="number" id="pue" name="pue" step="0.01" required>
+                </div><br>
+            
+                <button type="submit" id="submitButton" class="btn">Calculate Carbon Footprint</button>
             </form>
-    
-            <div id="result" class="result-section">
+
+            <div id="carbonFootprintOutput" class="result-section">
                 <h3>Your Data Center's Carbon Footprint</h3>
-                <p id="carbonFootprintOutput">Fill in the details to see the result.</p>
+                <p id="carbonFootprintResult">Fill in the details to see the result.</p>
             </div>
+
+            <button id="downloadPdfBtn" class="btn" style="display: none;">Download PDF Report</button>
         </div>
     </section>
-    
 
-    <footer>
+    <footer id="footer">
         <div class="footer-container">
             <div class="footer-social">
                 <h3>Follow Us</h3>
@@ -108,7 +127,7 @@
             <p>&copy; 2024 Carbon Footprint Project | All Rights Reserved</p>
         </div>
     </footer>
-    
+
     <script src="script.js"></script>
 </body>
 </html>

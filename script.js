@@ -1,30 +1,108 @@
-document.getElementById('carbon-footprint-form').addEventListener('submit', function(event) {
-    event.preventDefault();
+document.addEventListener("DOMContentLoaded", function () {
+    // Select form and submit button
+    const form = document.getElementById('carbon-footprint-form');
+    const submitButton = document.getElementById('submitButton');
+    const downloadPdfBtn = document.getElementById('downloadPdfBtn');
 
-    // Get form values
-    const energyConsumption = parseFloat(document.getElementById('energyConsumption').value);
-    const energySource = document.getElementById('energySource').value;
-    const coolingConsumption = parseFloat(document.getElementById('coolingConsumption').value);
-    const pue = parseFloat(document.getElementById('pue').value);
+    // Add event listener for form submission
+    form.addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent default form submission behavior
 
-    // Emission factors (kg CO2 per kWh)
-    const emissionFactorNonRenewable = 0.5; // Example factor for non-renewable energy
-    const emissionFactorRenewable = 0.05;   // Example factor for renewable energy
+        // Fetch form values
+        const energyConsumption = parseFloat(document.getElementById('energyConsumption').value);
+        const energySource = document.getElementById('energySource').value;
+        const coolingConsumption = parseFloat(document.getElementById('coolingConsumption').value);
+        const location = document.getElementById('location').value;
+        const dieselUsage = parseFloat(document.getElementById('dieselUsage').value);
+        const pue = parseFloat(document.getElementById('pue').value);
 
-    // Determine the emission factor based on energy source
-    let emissionFactor;
-    if (energySource === 'non-renewable') {
-        emissionFactor = emissionFactorNonRenewable;
-    } else {
-        emissionFactor = emissionFactorRenewable;
-    }
+        // Basic validation check
+        if (isNaN(energyConsumption) || isNaN(coolingConsumption) || isNaN(dieselUsage) || isNaN(pue)) {
+            alert('Please enter valid numbers for all inputs');
+            return;
+        }
 
-    // Calculate total energy consumption (including cooling and PUE)
-    const totalEnergyConsumption = energyConsumption * pue + coolingConsumption;
+        // Emission factors (kg CO2 per kWh) based on energy source in India
+        const emissionFactors = {
+            'coal': 0.82,
+            'naturalGas': 0.42,
+            'hydro': 0.03,
+            'solar': 0.01,
+            'wind': 0.01
+        };
 
-    // Calculate carbon footprint
-    const carbonFootprint = totalEnergyConsumption * emissionFactor;
+        // Diesel generator emission factor (kg CO2 per hour of operation)
+        const dieselEmissionFactor = 2.67;
 
-    // Display result
-    document.getElementById('carbonFootprintOutput').innerText = `Your data center's carbon footprint is ${carbonFootprint.toFixed(2)} kg of CO2.`;
+        // Location-based cooling adjustment factor
+        const locationCoolingFactors = {
+            'tropical': 1.2,
+            'temperate': 1.0,
+            'desert': 1.3
+        };
+
+        // Get emission factor for selected energy source
+        const emissionFactor = emissionFactors[energySource];
+
+        // Get cooling adjustment factor based on location
+        const coolingAdjustmentFactor = locationCoolingFactors[location];
+
+        // Calculate total energy consumption including PUE and cooling adjustment
+        const adjustedCoolingConsumption = coolingConsumption * coolingAdjustmentFactor;
+        const totalEnergyConsumption = energyConsumption * pue + adjustedCoolingConsumption;
+
+        // Calculate diesel generator emissions
+        const dieselEmissions = dieselUsage * dieselEmissionFactor;
+
+        // Calculate carbon footprint (energy + diesel)
+        const carbonFootprint = (totalEnergyConsumption * emissionFactor) + dieselEmissions;
+
+        // Display the result in the output div
+        document.getElementById('carbonFootprintResult').innerText = `Your data center's carbon footprint is ${carbonFootprint.toFixed(2)} kg of CO2.`;
+
+        // Show the download PDF button
+        downloadPdfBtn.style.display = 'block';
+    });
+
+    // Handle PDF generation when the download button is clicked
+    downloadPdfBtn.addEventListener('click', function () {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Fetch values again for the PDF
+        const energyConsumption = parseFloat(document.getElementById('energyConsumption').value);
+        const energySource = document.getElementById('energySource').value;
+        const coolingConsumption = parseFloat(document.getElementById('coolingConsumption').value);
+        const location = document.getElementById('location').value;
+        const dieselUsage = parseFloat(document.getElementById('dieselUsage').value);
+        const pue = parseFloat(document.getElementById('pue').value);
+        const carbonFootprint = document.getElementById('carbonFootprintResult').innerText;
+
+        // Set PDF font and styling
+        doc.setFont("helvetica");
+        doc.setFontSize(12);
+
+        // Add title with custom styling
+        doc.setFontSize(16);
+        doc.setTextColor(0, 102, 204); // Set color to match your website theme
+        doc.text('Carbon Footprint Report', 10, 20);
+        doc.setTextColor(0); // Reset color for the rest of the text
+
+        // Add content to the PDF
+        doc.text(`Total Energy Consumption: ${energyConsumption} kWh`, 10, 30);
+        doc.text(`Energy Source: ${energySource}`, 10, 40);
+        doc.text(`Cooling Energy Consumption: ${coolingConsumption} kWh`, 10, 50);
+        doc.text(`Data Center Location: ${location}`, 10, 60);
+        doc.text(`Diesel Generator Usage: ${dieselUsage} hours`, 10, 70);
+        doc.text(`PUE: ${pue}`, 10, 80);
+        doc.text(`${carbonFootprint}`, 10, 90);
+
+        // Add a footer or additional styling if needed
+        doc.setFontSize(10);
+        doc.text('Generated by Carbon Footprint Calculator', 10, 120);
+        doc.text('Your commitment to sustainability matters!', 10, 130);
+
+        // Save the PDF
+        doc.save('carbon-footprint-report.pdf');
+    });
 });
